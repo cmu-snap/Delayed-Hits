@@ -41,7 +41,7 @@ Ensure that `program_options` is installed and visible to CMake.
 ### 2. Installing Gurobi
 As described earlier, Gurobi requires a license to use. If you can't obtain one but would like to run
 the simulator anyway, skip to
-[**Compiling this code without Gurobi**](https://github.com/cmu-snap/Delayed-Hits/new/master?readme=1#3a-compiling-this-code-without-gurobi).
+[**Compiling this code without Gurobi**](https://github.com/cmu-snap/Delayed-Hits#3a-compiling-this-code-without-gurobi).
 Otherwise, download Gurobi Optimizer v8.1.1
 [here](https://www.gurobi.com/downloads/gurobi-software/), and follow the
 [Software Installation Guide](https://www.gurobi.com/documentation/8.1/quickstart_linux/software_installation_guid.html).
@@ -72,7 +72,7 @@ as well as each available caching policy (`cache_lru`, etc).
 #### 3.a) Compiling this code without Gurobi
 To compile the caching simulator without installing Gurobi, edit `CMakeLists.txt` in the top-level
 directory, and comment out the following line: `add_subdirectory(belatedly)`. Now simply follow the
-steps in [**Compiling this code**](https://github.com/cmu-snap/Delayed-Hits/new/master?readme=1#3-compiling-this-code) as usual.
+steps in [**Compiling this code**](https://github.com/cmu-snap/Delayed-Hits#3-compiling-this-code) as usual.
 
 ## Using the Simulator and BELATEDLY
 To view the available command-line options, run `build/bin/cache_{lru,arc,lhd,...} --help`
