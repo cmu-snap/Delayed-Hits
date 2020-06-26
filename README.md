@@ -23,7 +23,7 @@ unlike BELATEDLY, does not use Gurobi, and can be used even if you don't have ac
 ## Installation (Linux)
 Install g++-7+, CMake and make sure their dependencies are met:  
 ```
-sudo apt-get install update
+sudo apt-get update
 sudo apt-get install g++-[7+]
 sudo apt-get install cmake
 ```
