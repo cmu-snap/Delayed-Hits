@@ -79,6 +79,9 @@ To view the available command-line options, run `build/bin/cache_{lru,arc,lhd,..
 and `build/bin/belatedly --help`. Both the caching simulator and BELATEDLY are
 trace-driven; an example (anonymized) trace file containing 5K requests is provided in the
 `data/` directory, where each line of the trace has the following format: `timestamp;object_id`.
+(Note: The `timestamp` field is ignored in the current implementation! At the moment, each line
+of the trace represents one timestep; to encode zero request arrivals on timestep *x*, simply leave
+the *x*'th line of the trace file empty.)
 
 As a starting point, a good sanity check would be to make sure that Belady and BELATEDLY compute
 the same (optimal) cache schedule for Z=1 (no delayed hits). To verify this, run the following
