@@ -315,7 +315,10 @@ public:
     static void benchmark(BaseCache& model, const std::string& trace_fp, const std::
                           string& packets_fp, const size_t num_warmup_cycles) {
         std::list<utils::Packet> packets; // List of processed packets
+        size_t num_counted_packets = 0; // Post-warmup packet count
         size_t num_total_packets = 0; // Total packet count
+        size_t num_total_cycles = 0; // Total cycle count
+
         if (!packets_fp.empty()) {
             std::ofstream file(packets_fp, std::ios::out |
                                            std::ios::trunc);
@@ -345,28 +348,32 @@ public:
                 std::getline(linestream, flow_id, ';');
             }
             // Cache warmup completed
-            if (num_total_packets == num_warmup_cycles) {
+            if (num_total_cycles == num_warmup_cycles) {
                 model.warmupComplete(); packets.clear();
+                num_counted_packets = 0;
+
                 std::cout << "> Warmup complete after "
                           << num_warmup_cycles
                           << " cycles." << std::endl;
             }
             // Periodically save packets to file
-            if (num_total_packets > 0 &&
-                num_total_packets % 5000000 == 0) {
-                if (num_total_packets >= num_warmup_cycles) {
+            if (num_counted_packets > 0 &&
+                num_counted_packets % 5000000 == 0) {
+                if (num_total_cycles >= num_warmup_cycles) {
                     savePackets(packets, packets_fp);
                 }
-                std::cout << "On packet: " << num_total_packets
+                std::cout << "On packet: " << num_counted_packets
                           << ", latency: " << model.getTotalLatency() << std::endl;
             }
             // Process the packet
             if (!flow_id.empty()) {
+                num_total_packets++;
+                num_counted_packets++;
                 utils::Packet packet(flow_id);
                 model.process(packet, packets);
             }
             else { model.processAll(packets); }
-            num_total_packets++;
+            num_total_cycles++;
         }
 
         // Perform teardown
@@ -376,12 +383,13 @@ public:
         // Simulations results
         size_t total_latency = model.getTotalLatency();
         double average_latency = (
-            (num_total_packets == 0) ? 0 :
-            static_cast<double>(total_latency) / num_total_packets);
+            (num_counted_packets == 0) ? 0 :
+            static_cast<double>(total_latency) / num_counted_packets);
 
         // Debug: Print trace and simulation statistics
         std::cout << std::endl;
-        std::cout << "Total number of packets: " << num_total_packets << std::endl;
+        std::cout << "Total number of packets in trace: " << num_total_packets << std::endl;
+        std::cout << "Post-warmup packet count: " << num_counted_packets << std::endl;
         std::cout << "Total latency is: " << model.getTotalLatency() << std::endl;
         std::cout << "Average latency is: " << std::fixed << std::setprecision(2)
                   << average_latency << std::endl << std::endl;
